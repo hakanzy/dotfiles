@@ -1,5 +1,5 @@
 ##### NOTES #####
-# If run succesfully this file:
+# If run succesfully bash environment:
 #
 # $ brew install autoenv
 # $ brew install bash-completion
