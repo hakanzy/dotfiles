@@ -26,6 +26,7 @@
      YELLOW="\[\033[1;33m\]"
       GREEN="\[\033[0;32m\]"
        BLUE="\[\033[1;34m\]"
+     PURPLE="\[\033[1;35m\]"
   LIGHT_RED="\[\033[1;31m\]"
 LIGHT_GREEN="\[\033[1;32m\]"
       WHITE="\[\033[1;37m\]"
@@ -92,8 +93,21 @@ function set_virtualenv () {
   if test -z "$VIRTUAL_ENV" ; then
       PYTHON_VIRTUALENV=""
   else
-      PYTHON_VIRTUALENV="${BLUE}[`basename \"$VIRTUAL_ENV\"`]${COLOR_NONE} "
+      PYTHON_VIRTUALENV="${PURPLE}[`basename \"$VIRTUAL_ENV\"`]${COLOR_NONE} "
   fi
+}
+
+function set_pwd () {
+    pwd_length=17
+    pwd_symbol="..."
+    newPWD="${PWD/#$HOME/~}"
+
+    if [ $(echo -n $newPWD | wc -c | tr -d " ") -gt $pwd_length ]
+    then
+        newPWD="..$(echo -n $PWD | sed -e "s/.*\(.\{$pwd_length\}\)/\1/")"
+    else
+        newPWD="$(echo -n $PWD)"
+    fi
 }
 
 # Set the full bash prompt.
@@ -112,8 +126,10 @@ function set_bash_prompt () {
     BRANCH=''
   fi
 
+  set_pwd
+
   # Set the bash prompt variable.
-  PS1="${PYTHON_VIRTUALENV}${GREEN}\u ${YELLOW}\w${COLOR_NONE} ${BRANCH}${PROMPT_SYMBOL} "
+  PS1="${PYTHON_VIRTUALENV}${GREEN}\u ${YELLOW}${newPWD}${COLOR_NONE} ${BRANCH}${PROMPT_SYMBOL} "
 }
 
 # Tell bash to execute this function just before displaying its prompt.
